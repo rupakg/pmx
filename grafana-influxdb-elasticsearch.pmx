@@ -5,72 +5,10 @@ keywords: grafana, influxdb, elasticsearch
 type: Default
 documentation: |
   # Grafana Application that uses InfluxDB and ElasticSearch
+  
+  * The Grafana we interface can be accessed at panamax.local:8080. Use 'admin/admin' for credentials.
+  * The InfluxDB web interface can be accessed at panamax.local:81. Use 'root/root' for credentials and use the default 'rgdata' database to enter data.
 
-  ## Pre-requisites to run application
-
-  #### InfluxDB service
-   1. Pre-create a database by adding a env. var PRE_CREATE_DB=**influx_db_name**. Please make sure that you specify the same name in INFLUXDB_NAME as well.
-   2. Map port 8086:8086, and 81:8083
-
-  #### ElasticSearch service
-   None.
-
-  #### Grafana service
-   1. Set the following environment vars.:
-   * HTTP_USER - set username (default 'admin')
-   * HTTP_PASS - set password (default auto-generated)
-   * INFLUXDB_NAME - set to the name of the InfluxDB database name specified in PRE_CREATE_DB.
-   * INFLUXDB_HOST - set to the IP address of where InfluxDB is running e.g. 127.0.0.1
-   * INFLUXDB_PORT - set to the port where InfluxDB is running (default is 8086)
-   * ELASTICSEARCH_HOST - set to the IP address of where ElasticSearch is running e.g. 127.0.0.1
-   * ELASTICSEARCH_PORT - set to the port where ElasticSearch is running (default is 9200)
-   * INFLUXDB_IS_GRAFANADB - set to true, if you want to use InfluxDB for saving dashboards instead of ElasticSearch (default is false)
-   2. Map port 80:80
-   3. Link InfluxDB service with an alias of INFLUXDB.
-   4. Link ElasticSearch service with an alias of ELASTICSEARCH.
-
-  ## Grafana service
-   The first time that you run your container, a new user admin will be created for HTTP basic auth with a random password. To get the password, check the logs of the container.
-
-  ### Setting a specific username/password
-   You can specify username and password for HTTP Basic Auth of Grafana service by setting environment vars. for HTTP_USER and HTTP_PASS. The default user is set to 'admin'. If you don't change the password, the system will generate a random password. If you want to use a preset password instead of a random generated one, you can set the environment variable HTTP_PASS to your specific password when running the container.
-
-  ### Grafana Web Interface
-   Grafana exposes its web interface at port 80, so you can now login into Grafana via your browser: **http://127.0.0.1/**, using the username/password that you configured.
-
-  ## Using Grafana with InfluxDB
-
-  ### Configuring InfluxDB
-   The Grafana service needs to know the information of your InfluxDB for configuration. Please provide the following environment variables when running the containers:
-
-  * INFLUXDB_HOST=**LinkMe** (Address of your InfluxDB (do not use prefix such as http://))
-   * INFLUXDB_PORT=**LinkMe** (Port number of your InfluxDB (8086 or the port mapping 8086))
-   * INFLUXDB_NAME=**ChangeMe** (Database name of your InfluxDB)
-   * INFLUXDB_USER=root (Username of your InfluxDB)
-   * INFLUXDB_PASS=root Password of your InfluxDB
-   * INFLUXDB_IS_GRAFANADB=false (set to true if you want to use InfluxDB to save dashboards)
-
-  *Note*: You can also link the Grafana service to your InfluxDB service directly by giving your InfluxDB container an alias of 'INFLUXDB'. In this case, you don't need to specify 'INFLUXDB_HOST' and 'INFLUXDB_PORT' environment variables.
-
-  ### InfluxDB Web Interface
-   InfluxDB exposes a web interface at port 8083, so if you map host port 81 to container port 8083, you can browse to InfluxDB interface at: **http://127.0.0.1:81**
-
-  ### Creating the database
-   Using the InfluxDB web interface, create a database with the name that you specified in the environment variable 'INFLUXDB_NAME' while configuring InfluxDB service.
-
-  ## Using Grafana with ElasticSearch
-   If you want you use Elasticsearch to save and load you dashboards, you can provide the following environment variables for configuration:
-
-  * ELASTICSEARCH_HOST=**LinkMe** (Address of your Elasticsearch (do not use prefix such as http://))
-   * ELASTICSEARCH_PORT=**LinkMe** (Port number of your Elasticsearch (9200 or the port mapping 9200))
-
-  *Note*: You can also link your Elasticsearch container to Grafana by giving an alias of 'ELASTICSEARCH'.
-
-  ## Resources
-   * Source Documentation: https://registry.hub.docker.com/u/tutum/grafana/
-   * Grafana: See 'tutum/grafana' and https://github.com/tutumcloud/tutum-docker-grafana
-   * InfluxDB: See 'tutum/influxdb' and https://github.com/tutumcloud/tutum-docker-influxdb
-   * ElasticSearch: See 'tutum/elasticsearch' and https://github.com/tutumcloud/tutum-docker-elasticsearch
 images:
 - name: InfluxDB
   source: tutum/influxdb
@@ -108,9 +46,6 @@ images:
   expose:
   - '80'
   ports:
-  - host_port: '80'
-    container_port: '80'
-    proto: TCP
   - host_port: '8080'
     container_port: '80'
     proto: TCP
