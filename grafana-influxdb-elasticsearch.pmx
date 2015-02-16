@@ -9,7 +9,7 @@ documentation: |
   ## Pre-requisites to run application
 
   #### InfluxDB service
-   1. Pre-create a database by adding a env. var PRE_CREATE_DB=<db_name>. Please make sure that you specify the same name in INFLUXDB_NAME as well.
+   1. Pre-create a database by adding a env. var PRE_CREATE_DB=**influx_db_name**. Please make sure that you specify the same name in INFLUXDB_NAME as well.
    2. Map port 8086:8086, and 81:8083
 
   #### ElasticSearch service
