@@ -9,7 +9,7 @@ documentation: |
   ## Pre-requisites to run application
 
   #### InfluxDB service
-   1. Create a database with name as specified in INFLUXDB_NAME.
+   1. Pre-create a database by adding a env. var PRE_CREATE_DB=<db_name>. Please make sure that you specify the same name in INFLUXDB_NAME as well.
    2. Map port 8086:8086, and 81:8083
 
   #### ElasticSearch service
@@ -19,7 +19,12 @@ documentation: |
    1. Set the following environment vars.:
    * HTTP_USER - set username (default 'admin')
    * HTTP_PASS - set password (default auto-generated)
-   * INFLUXDB_NAME - set to the name of the InfluxDB database name
+   * INFLUXDB_NAME - set to the name of the InfluxDB database name specified in PRE_CREATE_DB.
+   * INFLUXDB_HOST - set to the IP address of where InfluxDB is running e.g. 127.0.0.1
+   * INFLUXDB_PORT - set to the port where InfluxDB is running (default is 8086)
+   * ELASTICSEARCH_HOST - set to the IP address of where ElasticSearch is running e.g. 127.0.0.1
+   * ELASTICSEARCH_PORT - set to the port where ElasticSearch is running (default is 9200)
+   * INFLUXDB_IS_GRAFANADB - set to true, if you want to use InfluxDB for saving dashboards instead of ElasticSearch (default is false)
    2. Map port 80:80
    3. Link InfluxDB service with an alias of INFLUXDB.
    4. Link ElasticSearch service with an alias of ELASTICSEARCH.
@@ -43,6 +48,7 @@ documentation: |
    * INFLUXDB_NAME=**ChangeMe** (Database name of your InfluxDB)
    * INFLUXDB_USER=root (Username of your InfluxDB)
    * INFLUXDB_PASS=root Password of your InfluxDB
+   * INFLUXDB_IS_GRAFANADB=false (set to true if you want to use InfluxDB to save dashboards)
 
   *Note*: You can also link the Grafana service to your InfluxDB service directly by giving your InfluxDB container an alias of 'INFLUXDB'. In this case, you don't need to specify 'INFLUXDB_HOST' and 'INFLUXDB_PORT' environment variables.
 
@@ -97,7 +103,7 @@ images:
   - host_port: '9200'
     container_port: '9200'
 - name: Grafana
-  source: rupakg/tutum-docker-grafana
+  source: tutum/grafana
   type: Default
   expose:
   - '80'
